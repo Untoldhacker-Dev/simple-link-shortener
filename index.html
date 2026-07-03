@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Short Links</title>
+<style>
+:root{--accent:#6366f1}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#f8fafc;color:#1e293b;min-height:100vh;display:flex;flex-direction:column}
+header{background:#fff;border-bottom:1px solid #e2e8f0;padding:.875rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:700;color:var(--accent);font-size:1.1rem}
+header a{font-size:13px;color:#64748b;text-decoration:none;padding:.3rem .7rem;border:1px solid #e2e8f0;border-radius:6px}
+header a:hover{background:#f1f5f9}
+main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1rem;text-align:center}
+h1{font-size:clamp(1.5rem,4vw,2.5rem);font-weight:800;margin-bottom:.75rem;color:#0f172a}
+h1 span{color:var(--accent)}
+p{color:#64748b;font-size:1rem;margin-bottom:2rem;max-width:440px}
+.links-grid{display:flex;flex-direction:column;gap:.6rem;width:100%;max-width:480px;margin-bottom:2.5rem}
+.link-item{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:.75rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem;text-decoration:none;color:inherit;transition:box-shadow .15s}
+.link-item:hover{box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.link-slug{font-weight:600;color:var(--accent);font-size:.9rem}
+.link-url{font-size:12px;color:#94a3b8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;text-align:right}
+.badge{font-size:10px;background:#f1f5f9;color:#64748b;padding:.2rem .5rem;border-radius:4px;white-space:nowrap}
+footer{padding:1rem;text-align:center;font-size:12px;color:#94a3b8}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo" data-config="site_title">Short Links</div>
+  <a href="/admin">Admin</a>
+</header>
+<main>
+  <h1>Short links, <span>fast.</span></h1>
+  <p>Use <strong>/go/your-slug</strong> to reach any destination instantly.</p>
+  <div class="links-grid" id="links"></div>
+</main>
+<footer>Powered by <span data-config="site_title">Short Links</span></footer>
+<script>
+async function loadFrontendConfig(){
+  try {
+    const cfg = await fetch('/api?action=frontend').then(r=>r.json());
+    applyConfig(cfg || {});
+  } catch (error) {}
+}
+
+function applyConfig(cfg){
+  const siteTitle = cfg.site_title || 'Short Links';
+  const accent = cfg.accent || '#6366f1';
+  document.documentElement.style.setProperty('--accent', accent);
+  document.title = siteTitle;
+  document.querySelectorAll('[data-config="site_title"]').forEach(el => {
+    el.textContent = siteTitle;
+  });
+}
+
+loadFrontendConfig().then(()=>fetch('/api?action=public').then(r=>r.json()).then(d=>{
+  const c=document.getElementById('links');
+  const links=d.links||[];
+  if(!links.length){c.innerHTML='<div style="color:#94a3b8;font-size:13px">No public links yet.</div>';return;}
+  c.innerHTML=links.map(l=>`<a class="link-item" href="/go/${esc(l.slug)}" target="_blank"><span class="link-slug">/go/${esc(l.slug)}</span><span class="badge">${l.hits||0} clicks</span></a>`).join('');
+}));
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+</script>
+</body>
+</html>

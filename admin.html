@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin — Short Links</title>
+<style>
+:root{--accent:#6366f1}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#f8fafc;color:#1e293b;min-height:100vh}
+header{background:#fff;border-bottom:1px solid #e2e8f0;padding:.875rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:700;color:var(--accent)}
+nav{display:flex;gap:.5rem}
+nav a,nav button{font-size:13px;color:#64748b;text-decoration:none;padding:.3rem .7rem;border:1px solid #e2e8f0;border-radius:6px;background:#fff;cursor:pointer;font-family:inherit}
+nav a:hover,nav button:hover{background:#f1f5f9}
+main{max-width:800px;margin:0 auto;padding:1.5rem}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:1rem;overflow:hidden}
+.card-head{padding:.875rem 1.25rem;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;font-weight:600;font-size:.9rem}
+.card-body{padding:1.25rem}
+input,select{border:1px solid #e2e8f0;border-radius:6px;padding:.5rem .75rem;font-size:13px;outline:none;font-family:inherit;width:100%}
+input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,.2)}
+.row{display:flex;gap:.6rem;flex-wrap:wrap}
+.row .f{flex:1;min-width:120px}
+label{font-size:11px;color:#64748b;display:block;margin-bottom:.3rem;font-weight:500}
+.btn{background:var(--accent);color:#fff;border:none;padding:.5rem 1.1rem;border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit}
+.btn:hover{opacity:.9}
+.btn-ghost{background:#fff;border:1px solid #e2e8f0;color:#475569;padding:.45rem .9rem;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit}
+.btn-ghost:hover{background:#f1f5f9}
+.btn-red{background:#ef4444;color:#fff;border:none;padding:.35rem .7rem;border-radius:5px;font-size:12px;cursor:pointer}
+.btn-red:hover{background:#dc2626}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:.5rem .75rem;border-bottom:2px solid #e2e8f0;font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:.04em}
+td{padding:.6rem .75rem;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+tr:last-child td{border:none}
+tr:hover td{background:#f8fafc}
+td.slug{font-weight:600;color:var(--accent)}
+td.url{color:#64748b;font-size:12px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+td.hits{color:#94a3b8;text-align:center}
+.tag{display:inline-block;font-size:10px;padding:.15rem .45rem;border-radius:4px;background:#f1f5f9;color:#64748b}
+.tag.pub{background:#dcfce7;color:#166534}
+.err{color:#ef4444;font-size:12px;margin-top:.4rem}
+.ok{color:#16a34a;font-size:12px;margin-top:.4rem}
+.stat{display:inline-block;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:.5rem 1rem;margin:.25rem;font-size:12px}
+.stat b{display:block;font-size:1.2rem;color:var(--accent)}
+.login{display:flex;align-items:center;justify-content:center;min-height:80vh}
+.lbox{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:2rem;width:320px;text-align:center}
+.lbox h2{font-weight:700;color:var(--accent);margin-bottom:1.25rem}
+.lbox input{margin-bottom:.75rem}
+#toast{position:fixed;bottom:1.5rem;right:1.5rem;display:flex;flex-direction:column;gap:.4rem;z-index:99}
+.ti{background:#1e293b;color:#fff;padding:.5rem .9rem;border-radius:6px;font-size:13px;animation:fi .2s}
+@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo" data-config="site_title">Short Links</div>
+  <nav><a href="/">View Site</a><button onclick="logout()">Sign Out</button></nav>
+</header>
+<div id="toast"></div>
+
+<div id="login" class="login">
+  <div class="lbox">
+    <h2>Admin</h2>
+    <input type="password" id="pw" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn" style="width:100%" onclick="doLogin()">Sign In</button>
+    <div class="err" id="lerr"></div>
+  </div>
+</div>
+
+<div id="app" style="display:none">
+  <main>
+    <div style="margin-bottom:1rem" id="stats"></div>
+    <div class="card">
+      <div class="card-head">Add Link</div>
+      <div class="card-body">
+        <div class="row" style="margin-bottom:.6rem">
+          <div class="f"><label>Slug (e.g. gh)</label><input id="slug" placeholder="my-link"></div>
+          <div class="f" style="flex:2"><label>Destination URL</label><input id="url" placeholder="https://..."></div>
+        </div>
+        <div class="row">
+          <div class="f"><label>Title (optional)</label><input id="title" placeholder="GitHub profile"></div>
+          <div class="f" style="max-width:140px"><label>Visibility</label><select id="vis"><option value="public">Public</option><option value="private">Private</option></select></div>
+          <div style="display:flex;align-items:flex-end"><button class="btn" onclick="addLink()">Add</button></div>
+        </div>
+        <div id="addMsg"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span>Links</span><button class="btn-ghost" onclick="load()">↻ Refresh</button></div>
+      <div style="overflow-x:auto">
+        <table><thead><tr><th>Slug</th><th>URL</th><th>Title</th><th style="text-align:center">Clicks</th><th>Vis</th><th></th></tr></thead>
+        <tbody id="links-body"></tbody></table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+async function loadFrontendConfig(){
+  try {
+    const cfg = await fetch('/api?action=frontend').then(r=>r.json());
+    applyConfig(cfg || {});
+  } catch (error) {}
+}
+
+function applyConfig(cfg){
+  const siteTitle = cfg.site_title || 'Short Links';
+  const accent = cfg.accent || '#6366f1';
+  document.documentElement.style.setProperty('--accent', accent);
+  document.title = `Admin — ${siteTitle}`;
+  document.querySelectorAll('[data-config="site_title"]').forEach(el => {
+    el.textContent = siteTitle;
+  });
+}
+
+let tok=sessionStorage.getItem('sl_tok')||'';
+loadFrontendConfig();
+if(tok)showApp();
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function toast(m){const e=document.createElement('div');e.className='ti';e.textContent=m;document.getElementById('toast').appendChild(e);setTimeout(()=>e.remove(),3000);}
+
+async function api(p,opts){
+  const r=await fetch('/api'+p,{headers:{'Content-Type':'application/json','x-admin-token':tok},...opts});
+  return r.json();
+}
+
+async function doLogin(){
+  const d=await fetch('/api?action=login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:document.getElementById('pw').value})}).then(r=>r.json());
+  if(d.token){tok=d.token;sessionStorage.setItem('sl_tok',tok);showApp();}
+  else document.getElementById('lerr').textContent=d.error||'Wrong password';
+}
+
+function logout(){tok='';sessionStorage.removeItem('sl_tok');location.reload();}
+
+async function showApp(){
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').style.display='';
+  load();
+}
+
+async function load(){
+  const d=await api('?action=all');
+  if(d.error){tok='';sessionStorage.removeItem('sl_tok');location.reload();return;}
+  const links=d.links||[];
+  const total=links.reduce((a,l)=>a+(l.hits||0),0);
+  document.getElementById('stats').innerHTML=`<div class="stat"><b>${links.length}</b>Total Links</div><div class="stat"><b>${total}</b>Total Clicks</div>`;
+  document.getElementById('links-body').innerHTML=links.length?links.map(l=>`<tr>
+    <td class="slug"><a href="/go/${esc(l.slug)}" target="_blank" style="color:var(--accent);text-decoration:none">/go/${esc(l.slug)}</a></td>
+    <td class="url" title="${esc(l.url)}">${esc(l.url)}</td>
+    <td style="font-size:12px;color:#475569">${esc(l.title||'')}</td>
+    <td class="hits">${l.hits||0}</td>
+    <td><span class="tag ${l.visibility==='public'?'pub':''}">${l.visibility||'private'}</span></td>
+    <td><button class="btn-red" data-s="${esc(l.slug)}">✕</button></td>
+  </tr>`).join(''):'<tr><td colspan="6" style="text-align:center;padding:2rem;color:#94a3b8">No links yet.</td></tr>';
+  document.querySelectorAll('[data-s]').forEach(b=>b.addEventListener('click',()=>deleteLink(b.dataset.s)));
+}
+
+async function addLink(){
+  const slug=document.getElementById('slug').value.trim();
+  const url=document.getElementById('url').value.trim();
+  const title=document.getElementById('title').value.trim();
+  const visibility=document.getElementById('vis').value;
+  const msg=document.getElementById('addMsg');
+  if(!slug||!url){msg.className='err';msg.textContent='Slug and URL are required';return;}
+  const d=await api('?action=add',{method:'POST',body:JSON.stringify({slug,url,title,visibility})});
+  if(d.ok){msg.className='ok';msg.textContent='Link added!';document.getElementById('slug').value='';document.getElementById('url').value='';document.getElementById('title').value='';load();}
+  else{msg.className='err';msg.textContent=d.error||'Error';}
+}
+
+async function deleteLink(slug){
+  if(!confirm('Delete /go/'+slug+'?'))return;
+  const d=await api('?action=delete',{method:'POST',body:JSON.stringify({slug})});
+  if(d.ok){toast('Deleted');load();}
+}
+</script>
+</body>
+</html>
