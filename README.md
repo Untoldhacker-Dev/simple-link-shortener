@@ -1,12 +1,8 @@
-# Shortlinks
 
-A minimal URL shortener and redirect service.
-
+# Deploy
 <a href="https://pages.adityakp.dev/deploy/github?repo=https://github.com/Untoldhacker-Dev/simple-link-shortener">
-  <img src="https://hostpanel.adityakp.dev/deploy_button.jpg" alt="Deploy to adityakp.dev Pages" height="32">
+  <img src="https://hostpanel.adityakp.dev/deploy_button.jpg" alt="Deploy to adityakp.dev Pages" height="44">
 </a>
-
-> ⚠️ **Warning:** This particular code is compatible with adityakp.dev Pages (pages.adityakp.dev) only.
 
 ## What it does
 This project is a modified copy of template for the same at [adityakp.dev Pages](https://pages.adityakp.dev), it has simple shortlink creation mechanism and does not contain features like stats, ads, custom UI page, captcha etc, for these advanced features use Pro URL Shortener template by AP. This template is supposed to be lightweight.
@@ -58,4 +54,6 @@ Configure your app by editing `config.db_.json`:
 | `accent` | "#6366f1" | Hex color used for buttons, links, and branding elements |
 | `mode` | "public" | Display mode (currently for frontend styling context) |
 | `admin_password` | "changeme" | Password required to access the admin panel and manage links |
+
+> **Warning:** This particular code is compatible with adityakp.dev Pages (pages.adityakp.dev) only, click the button below to deploy it directly on your domain using Pages.
 
