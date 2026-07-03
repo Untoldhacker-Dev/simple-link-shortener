@@ -2,11 +2,11 @@
 
 A minimal URL shortener and redirect service.
 
-## Deploy
+<a href="https://pages.adityakp.dev/deploy/github?repo=https://github.com/Untoldhacker-Dev/simple-link-shortener">
+  <img src="https://hostpanel.adityakp.dev/deploy_button.jpg" alt="Deploy to adityakp.dev Pages" height="32">
+</a>
 
-> ⚠️ **Warning:** This particular code is compatible with adityakp.dev Pages (pages.adityakp.dev) only, click the banner below to deploy this project to your own domain using Pages.
-
-[![Deploy to adityakp.dev Pages](https://hostpanel.adityakp.dev/deploy_button.jpg)](https://pages.adityakp.dev/deploy/github?repo=)
+> ⚠️ **Warning:** This particular code is compatible with adityakp.dev Pages (pages.adityakp.dev) only.
 
 ## What it does
 This project is a modified copy of template for the same at [adityakp.dev Pages](https://pages.adityakp.dev), it has simple shortlink creation mechanism and does not contain features like stats, ads, custom UI page, captcha etc, for these advanced features use Pro URL Shortener template by AP. This template is supposed to be lightweight.
@@ -36,4 +36,26 @@ This project lets you create short links such as `/go/my-link` that redirect vis
 - `go.endpoint.js` - redirects short slugs to destination URLs
 - `config.js` - reads configuration values from `config.db_.json`
 - `index.html` and `admin.html` - the public and admin web interfaces
+
+## Configuration
+
+Configure your app by editing `config.db_.json`:
+
+```json
+{
+  "site_title": "Short Links",
+  "accent": "#6366f1",
+  "mode": "public",
+  "admin_password": "changeme"
+}
+```
+
+### Available settings
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `site_title` | "Short Links" | The name of your shortlink service (displayed in header and footer) |
+| `accent` | "#6366f1" | Hex color used for buttons, links, and branding elements |
+| `mode` | "public" | Display mode (currently for frontend styling context) |
+| `admin_password` | "changeme" | Password required to access the admin panel and manage links |
 
