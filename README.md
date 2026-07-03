@@ -55,5 +55,9 @@ Configure your app by editing `config.db_.json`:
 | `mode` | "public" | Display mode (currently for frontend styling context) |
 | `admin_password` | "changeme" | Password required to access the admin panel and manage links |
 
-> **Warning:** This particular code is compatible with adityakp.dev Pages (pages.adityakp.dev) only, click the button below to deploy it directly on your domain using Pages.
+## Restrictions
+This code may include some packages that might not be whitelisted globally, unlike templates - custom installs require package approval from admin, to get a package (npm) usage approved for your site, contact admin@adityakp.dev .
+
+--
+> **Warning:** This particular code is compatible with adityakp.dev Pages (pages.adityakp.dev) only, click the button at the top of this document to deploy it directly on your domain using Pages.
 
