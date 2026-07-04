@@ -4,6 +4,9 @@
   <img src="https://hostpanel.adityakp.dev/deploy_button.jpg" alt="Deploy to adityakp.dev Pages" height="44">
 </a>
 
+# Help
+[adityakp.dev Pages docs](https://adityakp.dev/docs.html)
+
 ## What it does
 This project is a modified copy of template for the same at [adityakp.dev Pages](https://pages.adityakp.dev), it has simple shortlink creation mechanism and does not contain features like stats, ads, custom UI page, captcha etc, for these advanced features use Pro URL Shortener template by AP. This template is supposed to be lightweight.
 
