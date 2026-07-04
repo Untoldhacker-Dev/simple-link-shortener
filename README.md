@@ -1,6 +1,6 @@
 
 # Deploy
-<a href="https://pages.adityakp.dev/deploy/github?repo=https://github.com/Untoldhacker-Dev/simple-link-shortener">
+<a href="https://pages.adityakp.dev/deploy/github?repo=https://github.com/adityakp-dev-Pages/simple-link-shortener">
   <img src="https://hostpanel.adityakp.dev/deploy_button.jpg" alt="Deploy to adityakp.dev Pages" height="44">
 </a>
 
